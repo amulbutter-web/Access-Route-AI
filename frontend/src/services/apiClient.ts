@@ -1,103 +1,88 @@
 // ============================================================
 // AccessRoute AI — Frontend API Client
-// Owner: Person 01
-// NOTE: All backend calls go through this file. Never call
-//       TinyFish or external APIs directly from the browser.
+// All calls to Person 4 Backend go through this file.
+// Seamless dual-mode: Vite dev proxy OR direct localhost:3001 fallback
 // ============================================================
 
-import type { RouteRequest, RouteResponse, Place, ApiError } from "../types";
+import type { Location, RouteResult, ApiResponse, EvidenceResult } from '../types';
 
-// Backend base URL — loaded from environment variable at build time.
-// Set VITE_API_BASE_URL in .env (never commit real values).
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3001";
+// Configurable base URL with fallback to relative (proxy) or direct localhost:3001
+const ENV_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
 
-// ─── Helper: safe fetch with timeout ─────────────────────────
+// ─── Helper: safe fetch with dual-mode fallback & timeout ───
 async function safeFetch(
-  url: string,
+  endpoint: string,
   options?: RequestInit,
   timeoutMs = 15_000
 ): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  // If ENV_BASE is specified, use it directly
+  if (ENV_BASE) {
+    try {
+      return await fetch(`${ENV_BASE}${endpoint}`, { ...options, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  // Dual-mode: Try relative path first (Vite proxy)
   try {
-    const res = await fetch(url, { ...options, signal: controller.signal });
-    return res;
+    const res = await fetch(endpoint, { ...options, signal: controller.signal });
+    if (res.ok || res.status < 500) {
+      return res;
+    }
+    throw new Error(`Relative proxy returned status ${res.status}`);
+  } catch (err) {
+    // If relative fetch fails (e.g. no proxy running or CORS issue), fallback directly to port 3001
+    const fallbackUrl = `http://localhost:3001${endpoint}`;
+    try {
+      return await fetch(fallbackUrl, { ...options, signal: controller.signal });
+    } catch {
+      throw err;
+    }
   } finally {
     clearTimeout(timer);
   }
 }
 
-// ─── Helper: parse error response ────────────────────────────
-async function parseErrorResponse(res: Response): Promise<ApiError> {
+// ─── GET /api/locations ───────────────────────────────────
+export async function fetchLocations(): Promise<Location[]> {
   try {
-    const body = await res.json();
-    return {
-      code: body?.code ?? "UNKNOWN_ERROR",
-      message: body?.message ?? "An unexpected error occurred.",
-      requestId: body?.requestId,
-    };
-  } catch {
-    return {
-      code: "PARSE_ERROR",
-      message: "Service temporarily unavailable. Please try again.",
-    };
-  }
-}
-
-// ─── GET /api/places ─────────────────────────────────────────
-/**
- * Returns the list of supported campus places for the dropdowns.
- * Returns an empty array on error (UI shows empty state).
- */
-export async function fetchPlaces(): Promise<Place[]> {
-  try {
-    const res = await safeFetch(`${API_BASE}/api/places`);
+    const res = await safeFetch('/api/locations');
     if (!res.ok) return [];
-    const data = await res.json();
-    // Validate minimal shape
-    if (!Array.isArray(data)) return [];
-    return data as Place[];
-  } catch {
+    const json: ApiResponse<Location[]> = await res.json();
+    return json.data ?? [];
+  } catch (err) {
+    console.error('[AccessRoute AI] Failed to fetch locations:', err);
     return [];
   }
 }
 
-// ─── POST /api/route ─────────────────────────────────────────
-/**
- * Requests a step-free route between two campus locations.
- * Returns a RouteResponse on success, or throws an ApiError.
- */
+// ─── POST /api/route ──────────────────────────────────────
 export async function fetchRoute(
-  request: RouteRequest
-): Promise<RouteResponse> {
-  let res: Response;
-  try {
-    res = await safeFetch(`${API_BASE}/api/route`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(request),
-    });
-  } catch (err) {
-    // Network error or timeout
-    const isAbort = err instanceof DOMException && err.name === "AbortError";
-    throw {
-      code: isAbort ? "REQUEST_TIMEOUT" : "NETWORK_ERROR",
-      message: "Service temporarily unavailable. Please try again.",
-    } satisfies ApiError;
-  }
+  from: string,
+  to: string,
+  requireStepFree: boolean
+): Promise<ApiResponse<RouteResult>> {
+  const res = await safeFetch('/api/route', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from, to, requireStepFree }),
+  });
+  const json: ApiResponse<RouteResult> = await res.json();
+  return json;
+}
 
-  if (!res.ok) {
-    const apiError = await parseErrorResponse(res);
-    throw apiError;
-  }
-
+// ─── GET /api/evidence/:locationId ────────────────────────
+export async function fetchEvidence(locationId: string): Promise<EvidenceResult | null> {
   try {
-    const data = await res.json();
-    return data as RouteResponse;
+    const res = await safeFetch(`/api/evidence/${encodeURIComponent(locationId)}`);
+    if (!res.ok) return null;
+    const json: ApiResponse<EvidenceResult> = await res.json();
+    return json.data ?? null;
   } catch {
-    throw {
-      code: "PARSE_ERROR",
-      message: "Received an unexpected response. Please try again.",
-    } satisfies ApiError;
+    return null;
   }
 }

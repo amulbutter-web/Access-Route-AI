@@ -1,77 +1,99 @@
 // ============================================================
-// AccessRoute AI — Shared TypeScript Types
-// Owner: Person 01 (agreed with Person 02 — do not change
-//        without team approval and updating API_CONTRACTS.md)
+// AccessRoute AI — Frontend Type Definitions
+// Aligned with Person 4 Backend API Contracts
 // ============================================================
 
-// ─── Accessibility Status ────────────────────────────────────
 export type AccessibilityStatus =
-  | "verified_step_free"
-  | "reported_step_free"
-  | "not_step_free"
-  | "unknown";
+  | 'verified_step_free'
+  | 'reported_step_free'
+  | 'not_step_free'
+  | 'unknown';
 
-// ─── Place ───────────────────────────────────────────────────
-export type PlaceKind = "building" | "entrance" | "outdoor_node" | "destination";
-
-export interface Place {
+// Matches GET /api/locations response items
+export interface Location {
   id: string;
   name: string;
-  kind: PlaceKind;
+  shortName: string;
+  type: 'building' | 'entrance' | 'junction' | 'landmark';
+  accessibilityNotes?: string;
 }
 
-// ─── Route Request ───────────────────────────────────────────
-export interface RouteRequest {
-  startId: string;
-  destinationId: string;
-  mode: "step_free"; // always "step_free" for MVP
+// Matches POST /api/route response → data.route[]
+export interface RouteSegment {
+  from: { id: string; name: string; shortName: string; lat: number; lng: number; type: string };
+  to: { id: string; name: string; shortName: string; lat: number; lng: number; type: string };
+  edge: {
+    id: string;
+    distanceMeters: number;
+    accessibilityStatus: AccessibilityStatus;
+    pathType: string;
+    surface?: string;
+    sourceEvidence?: string;
+    notes?: string;
+  };
+  instruction: string;
 }
 
-// ─── Route Instructions ──────────────────────────────────────
-export interface RouteInstruction {
-  stepNumber: number;
-  description: string;
-  accessibilityStatus: AccessibilityStatus;
-  distanceMeters?: number; // only if defensible/known
+export interface AccessibilitySummary {
+  allVerifiedStepFree: boolean;
+  hasUnknownSegments: boolean;
+  hasReportedOnlySegments: boolean;
+  unknownSegmentCount: number;
+  reportedOnlySegmentCount: number;
+  statusBreakdown: Record<AccessibilityStatus, number>;
 }
 
-// ─── Evidence ────────────────────────────────────────────────
-export interface Evidence {
-  sourceUrl: string;
-  sourceTitle: string;
-  retrievedAt: string;       // ISO 8601
-  claim: string;
-  verificationLabel: string;
-  limitations: string;
+// Matches POST /api/route response → data
+export interface RouteResult {
+  success: boolean;
+  route: RouteSegment[] | null;
+  totalDistanceMeters: number;
+  estimatedWalkingMinutes: number;
+  accessibilitySummary: AccessibilitySummary;
+  textDirections: string[];
+  warnings: string[];
+  computedAt: string;
 }
 
-// ─── Route Response ──────────────────────────────────────────
-export type RouteStatus =
-  | "found"
-  | "no_route"
-  | "invalid_input"
-  | "service_error";
-
-export interface RouteResponse {
-  status: RouteStatus;
-  routeNodeIds?: string[];
-  instructions?: RouteInstruction[];
-  distanceMeters?: number;   // only if defensible
-  evidence?: Evidence[];
-  warnings?: string[];
-  generatedAt: string;       // ISO 8601
+// Matches the standard API envelope
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: { code: string; message: string; details?: string };
+  meta: {
+    timestamp: string;
+    requestId: string;
+    duration?: number;
+    provider?: string;
+    cached?: boolean;
+  };
 }
 
-// ─── Error Response ──────────────────────────────────────────
-export interface ApiError {
-  code: string;              // stable machine-readable code
-  message: string;           // user-safe description
-  requestId?: string;
+// Evidence types
+export interface EvidenceSource {
+  title: string;
+  url: string;
+  snippet: string;
+  siteName: string;
+  relevanceScore: number;
+  retrievedAt: string;
 }
 
-// ─── API State (for UI state management) ─────────────────────
+export interface EvidenceResult {
+  query: string;
+  locationName: string;
+  sources: EvidenceSource[];
+  summary: string;
+  confidence: 'high' | 'medium' | 'low' | 'none';
+  retrievedAt: string;
+  provider: string;
+  isCached: boolean;
+  cacheAge?: number;
+}
+
+// UI State Machine
 export type ApiState<T> =
-  | { kind: "idle" }
-  | { kind: "loading" }
-  | { kind: "success"; data: T }
-  | { kind: "error"; error: ApiError };
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'success'; data: T }
+  | { kind: 'error'; error: { code: string; message: string } };
