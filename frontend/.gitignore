@@ -1,0 +1,25 @@
+# AccessRoute AI — Frontend .gitignore
+
+# Environment files — NEVER commit real values
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+*.swp
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Vite
+.vite/
