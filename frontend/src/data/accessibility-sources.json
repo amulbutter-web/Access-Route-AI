@@ -1,0 +1,62 @@
+{
+  "dataDisclaimer": "IMPORTANT: All coordinates and distances are approximate estimates for demonstration purposes during HackIIITD. They have NOT been professionally surveyed. Accessibility statuses labeled 'verified_step_free' are based on best available public information about the Delhi High Court complex, not a professional accessibility audit. 'reported_step_free' indicates information reported by visitors/advocates. 'unknown' means no assessment has been performed. This data should NOT be used for real navigation decisions by people who depend on step-free access without independent on-site verification.",
+  "location": "Delhi High Court, Sher Shah Road, New Delhi - 110503",
+  "lastUpdated": "2024-10-01",
+  "dataScope": "Delhi High Court main campus complex — limited subset of buildings and paths",
+  "notCovered": [
+    "All interior corridors, courtrooms, and chambers",
+    "Temporary construction, barricades, or security barriers",
+    "Elevator real-time operational status",
+    "Weather-dependent path conditions (monsoon flooding)",
+    "Evening/night accessibility and lighting",
+    "Buildings and annexes not listed in campus-nodes.json",
+    "Supreme Court of India (adjacent compound)",
+    "District courts or tribunals outside DHC complex"
+  ],
+  "sources": [
+    {
+      "id": "src-dhc-website",
+      "description": "Delhi High Court official website accessibility statement and contact information",
+      "type": "official_website",
+      "url": "https://delhihighcourt.nic.in/web/accessibility-statement",
+      "date": "2024-10-01",
+      "reliability": "medium",
+      "notes": "Website accessibility confirmed; physical campus accessibility not detailed on official site"
+    },
+    {
+      "id": "src-archello-c-block",
+      "description": "Architectural documentation of the New Courts Block (C Block) by Design Forum International",
+      "type": "architectural_reference",
+      "url": "https://archello.com/project/new-courts-block-at-delhi-high-court-new-delhi",
+      "date": "2024-08-01",
+      "reliability": "medium",
+      "notes": "Architectural features described; on-site conditions may differ"
+    },
+    {
+      "id": "src-citizen-charter",
+      "description": "Delhi High Court Citizen's Charter with gate and location information",
+      "type": "official_document",
+      "url": "https://delhihighcourt.nic.in/files/2025-05/citizen-charter/citizen_charter_new.pdf",
+      "date": "2025-05-01",
+      "reliability": "medium_to_high",
+      "notes": "Official document with gate numbers and access information"
+    },
+    {
+      "id": "src-visitor-reports",
+      "description": "Accessibility observations from advocates and regular visitors",
+      "type": "user_report",
+      "date": "2024-09-15",
+      "reliability": "low",
+      "notes": "Anecdotal; may be outdated or inaccurate"
+    },
+    {
+      "id": "src-jaldi-courthouse-design",
+      "description": "Court Design Handbook for accessibility standards in Indian courts",
+      "type": "design_standard",
+      "url": "https://jaldi-vidhilegalpolicy.in/jaldilab/projects/courtDesignHandbook/accessibilityNavigationPlan",
+      "date": "2024-01-01",
+      "reliability": "medium",
+      "notes": "National design guidelines; specific DHC compliance not guaranteed"
+    }
+  ]
+}
