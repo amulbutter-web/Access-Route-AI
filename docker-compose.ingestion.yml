@@ -1,0 +1,41 @@
+# Ingestion stack: FastAPI service + PostGIS + Redis.
+#   cp .env.example .env   # set TINYFISH_API_KEY and INGESTION_ADMIN_TOKEN
+#   docker compose -f docker-compose.ingestion.yml up --build
+# The app itself (frontend + backend) is in docker-compose.yml.
+services:
+  ingestion:
+    build: ./services/ingestion
+    environment:
+      DATABASE_URL: postgresql+psycopg://accessroute:accessroute@postgres:5432/accessroute
+      REDIS_URL: redis://redis:6379/0
+      TINYFISH_API_KEY: ${TINYFISH_API_KEY:?set it in .env}
+      INGESTION_ADMIN_TOKEN: ${INGESTION_ADMIN_TOKEN:?set it in .env}
+      PERSISTENT_STORE_ENABLED: "true"
+      INGESTION_SCHEDULER_ENABLED: ${INGESTION_SCHEDULER_ENABLED:-false}
+    ports: ["8000:8000"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: accessroute
+      POSTGRES_USER: accessroute
+      POSTGRES_PASSWORD: accessroute
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U accessroute -d accessroute"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes: ["redis-data:/data"]
+volumes:
+  postgres-data:
+  redis-data:

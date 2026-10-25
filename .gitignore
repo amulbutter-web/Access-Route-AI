@@ -1,0 +1,36 @@
+# Secrets — never commit real values (only *.example files are tracked)
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+
+# Build output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.vite/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Logs & local databases
+*.log
+npm-debug.log*
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp

@@ -1,0 +1,23 @@
+# Full app: React frontend (nginx) + Express backend.
+#   cp .env.example .env   # set TINYFISH_API_KEY
+#   docker compose up --build
+# Frontend: http://localhost:8080   (nginx proxies /api/* to the backend)
+# The Python ingestion stack is separate: see docker-compose.ingestion.yml
+services:
+  backend:
+    build: ./backend
+    environment:
+      PORT: "3001"
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:8080
+      TINYFISH_API_KEY: ${TINYFISH_API_KEY:?set TINYFISH_API_KEY in .env}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/api/health/ping').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on:
+      backend: { condition: service_healthy }
