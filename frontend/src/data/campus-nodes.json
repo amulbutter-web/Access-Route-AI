@@ -1,0 +1,168 @@
+[
+  {
+    "id": "main-gate",
+    "name": "Delhi High Court Main Gate (Gate No. 1)",
+    "shortName": "Main Gate",
+    "lat": 28.6328,
+    "lng": 77.2405,
+    "type": "entrance",
+    "description": "Primary entrance from Sher Shah Road for visitors and advocates",
+    "accessibilityNotes": "Ground level entry with security checkpoint; vehicle drop-off area nearby"
+  },
+  {
+    "id": "gate-2",
+    "name": "Gate No. 2 (Lawyers Gate)",
+    "shortName": "Gate 2",
+    "lat": 28.6332,
+    "lng": 77.2412,
+    "type": "entrance",
+    "description": "Dedicated entry for advocates with valid Bar Association ID",
+    "accessibilityNotes": "Ground level entry; separate pedestrian path"
+  },
+  {
+    "id": "gate-7",
+    "name": "Gate No. 7 (School Block Side)",
+    "shortName": "Gate 7",
+    "lat": 28.6320,
+    "lng": 77.2418,
+    "type": "entrance",
+    "description": "Alternative entry from the School Block side",
+    "accessibilityNotes": "Ground level; less crowded during peak hours"
+  },
+  {
+    "id": "old-building",
+    "name": "Main Court Building (Old Block)",
+    "shortName": "Old Building",
+    "lat": 28.6330,
+    "lng": 77.2410,
+    "type": "building",
+    "floor": 0,
+    "description": "Original High Court building housing courtrooms, administrative offices, and the Registrar General's office",
+    "accessibilityNotes": "Historic building; ground floor accessible via main entrance. Upper floors: elevator reported but operational status requires on-site confirmation"
+  },
+  {
+    "id": "c-block",
+    "name": "New Courts Block (C Block)",
+    "shortName": "C Block",
+    "lat": 28.6335,
+    "lng": 77.2415,
+    "type": "building",
+    "floor": 0,
+    "description": "Modern block with 15 courtrooms across 4 floors and 9 Registrars' Courts on ground floor. Designed by Design Forum International",
+    "accessibilityNotes": "Modern construction with ramp access at ground level; elevators to upper floors reported available"
+  },
+  {
+    "id": "s-block",
+    "name": "S Block",
+    "shortName": "S Block",
+    "lat": 28.6338,
+    "lng": 77.2408,
+    "type": "building",
+    "floor": 0,
+    "description": "Newest building inaugurated in December 2022 with additional courtrooms and modern facilities",
+    "accessibilityNotes": "Modern building; accessible entrance with ramp reported. Elevator access to all floors"
+  },
+  {
+    "id": "lawyers-chambers-1",
+    "name": "Lawyers Chambers Block I",
+    "shortName": "Chambers I",
+    "lat": 28.6326,
+    "lng": 77.2413,
+    "type": "building",
+    "floor": 0,
+    "description": "First block of advocates' chambers with individual offices for practicing lawyers",
+    "accessibilityNotes": "Ground floor accessible; upper floor access varies by section"
+  },
+  {
+    "id": "lawyers-chambers-2",
+    "name": "Lawyers Chambers Block II",
+    "shortName": "Chambers II",
+    "lat": 28.6324,
+    "lng": 77.2416,
+    "type": "building",
+    "floor": 0,
+    "description": "Second block of advocates' chambers with additional office space",
+    "accessibilityNotes": "Ground floor accessible; narrow corridors in some sections"
+  },
+  {
+    "id": "bar-library",
+    "name": "Bar Library",
+    "shortName": "Bar Library",
+    "lat": 28.6331,
+    "lng": 77.2407,
+    "type": "building",
+    "floor": 0,
+    "description": "Library facility maintained by the Delhi High Court Bar Association for advocates' reference and study",
+    "accessibilityNotes": "Ground floor entrance accessible; reading rooms on multiple levels"
+  },
+  {
+    "id": "canteen",
+    "name": "High Court Canteen & Cafeteria",
+    "shortName": "Canteen",
+    "lat": 28.6328,
+    "lng": 77.2417,
+    "type": "building",
+    "floor": 0,
+    "description": "Dining facility serving advocates, staff, and visitors within the court complex",
+    "accessibilityNotes": "Ground level, step-free entry reported"
+  },
+  {
+    "id": "filing-counter",
+    "name": "Filing Counter & Registry",
+    "shortName": "Filing Counter",
+    "lat": 28.6333,
+    "lng": 77.2409,
+    "type": "building",
+    "floor": 0,
+    "description": "Counter for filing cases, petitions, and legal documents with the court registry",
+    "accessibilityNotes": "Ground floor; accessible counter height reported"
+  },
+  {
+    "id": "parking-area",
+    "name": "Visitor Parking Area",
+    "shortName": "Parking",
+    "lat": 28.6322,
+    "lng": 77.2405,
+    "type": "landmark",
+    "description": "Multi-level parking facility near the main entrance for visitors and advocates",
+    "accessibilityNotes": "Accessible parking spots near entrance reported; elevator to court level"
+  },
+  {
+    "id": "junction-central",
+    "name": "Central Courtyard Junction",
+    "shortName": "Central Junction",
+    "lat": 28.6330,
+    "lng": 77.2412,
+    "type": "junction",
+    "description": "Central open courtyard connecting the Old Building, C Block, and Lawyers Chambers"
+  },
+  {
+    "id": "junction-north",
+    "name": "North Corridor Junction",
+    "shortName": "North Junction",
+    "lat": 28.6336,
+    "lng": 77.2412,
+    "type": "junction",
+    "description": "Connecting point between C Block, S Block, and the northern court complex"
+  },
+  {
+    "id": "junction-south",
+    "name": "South Walkway Junction",
+    "shortName": "South Junction",
+    "lat": 28.6325,
+    "lng": 77.2412,
+    "type": "junction",
+    "description": "Junction near Lawyers Chambers and the Canteen area"
+  },
+  {
+    "id": "mediation-centre",
+    "name": "Delhi High Court Mediation Centre",
+    "shortName": "Mediation Centre",
+    "lat": 28.6327,
+    "lng": 77.2420,
+    "type": "building",
+    "floor": 0,
+    "description": "Facility for alternative dispute resolution and court-annexed mediation services",
+    "accessibilityNotes": "Ground floor accessible; separate accessible entrance reported"
+  }
+]
